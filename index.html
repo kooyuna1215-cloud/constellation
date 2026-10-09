@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="dark">
 <title>CONSTELLATION · 별자리 플레이리스트</title>
-<meta name="app-version" content="CONSTELLATION 2.3 single-file">
+<meta name="app-version" content="CONSTELLATION 2.4 single-file">
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'">
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,400&family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@300;400;500&display=swap"></noscript>
 <style>
@@ -123,6 +123,16 @@ body.drag,body.drag *{user-select:none;-webkit-user-select:none}body.drag #sky{c
 #cpop{transform:translate(-46%,-50%) scale(.97)}#spop{transform:translate(-50%,-44%) scale(.97)}#cf{transform:translate(-50%,-50%) scale(.92);filter:none}
 #cpop.on,#spop.on,#cf.on{transform:translate(-50%,-50%)}
 #empty .eb{font:italic 400 clamp(20px,2.4vw,28px) var(--serif);letter-spacing:.16em;color:#e9e2ff;margin-bottom:6px;text-shadow:0 0 24px rgba(190,170,255,.5)}
+.fi{position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0;pointer-events:none}
+.media{margin-top:10px;padding-top:10px;border-top:1px solid var(--edge);font-size:12px}
+.mrow{display:flex;align-items:center;gap:6px;margin-top:4px;color:var(--mute)}.mrow .mn{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mrow .mn em{color:#ffc4dc;font-style:normal}
+.mnote{margin:8px 0 0;font-size:11px;line-height:1.55;color:var(--mute)}
+#vpop{width:min(880px,94vw);padding:18px 20px 16px;box-shadow:0 30px 80px rgba(2,2,20,.6),0 0 0 1px var(--c1)}
+#vpop .vh{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;padding-right:30px}#vpop .vh b{font:600 20px var(--kr)}#vpop .vh span{color:#cfc8f5}
+#vpop .eb{font:italic 400 13px var(--serif);letter-spacing:.2em;color:var(--mute)}
+.vbox{position:relative;border-radius:14px;overflow:hidden;margin-top:10px;background:#02030e;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 0 44px -12px var(--c1)}.vbox video{display:block;width:100%;max-height:56dvh;background:#02030e}
+.vctl{display:flex;align-items:center;gap:10px;margin-top:12px}.vctl .vb{width:40px;height:40px;border-radius:50%;border:1px solid var(--c1);background:radial-gradient(circle,var(--c2),transparent 90%);cursor:pointer;flex:none}.vctl input[type=range]{accent-color:var(--c1);min-width:0}#vseek{flex:1}#vvol{width:80px}.vctl span.t{font-size:12px;color:var(--mute);min-width:86px;text-align:right}
+.vsrc{display:flex;gap:6px;margin-top:8px}.vsrc .pill.on{border-color:var(--c1);color:var(--c1)}
 :focus-visible{outline:2px solid #ffe3a1;outline-offset:2px}.shake{animation:shk .35s}@keyframes shk{25%{transform:translate(-52%,-50%)}75%{transform:translate(-48%,-50%)}}
 @media(max-width:860px){
  #stage{position:relative;height:58dvh;min-height:380px}.view #stage{height:100dvh}.view #left,.view #side{display:none}
@@ -150,7 +160,7 @@ body.drag,body.drag *{user-select:none;-webkit-user-select:none}body.drag #sky{c
   <div id="tools"><div id="auth"><div id="who" class="ver" style="margin:0 0 6px"></div><div class="row" style="margin-top:0"><button class="pill sm" id="b-auth" data-a="login">Google 로그인</button><button class="pill sm" id="b-push" data-a="fbpush" hidden>이 기기 데이터 올리기</button></div></div><div style="height:10px"></div><div id="warn" hidden>⚠ 이 브라우저에서는 자동 저장이 안 돼요. 「백업 저장」으로 JSON 파일을 내려받아 두세요.</div>
    <div class="row"><button class="pill sm" data-a="export">백업 저장</button><button class="pill sm" data-a="import">백업 불러오기</button></div>
    <div class="row"><select id="im" class="pill sm" aria-label="인트로 설정"><option value="first">인트로: 처음만</option><option value="always">인트로: 항상</option><option value="never">인트로: 끄기</option></select><button class="pill sm" data-a="replay">인트로 다시 보기</button></div>
-   <p class="ver">CONSTELLATION 2.3 · 단일 HTML 파일<br>웹 버전과 내려받은 파일은 저장 공간이 서로 달라요. 백업 파일로 옮길 수 있어요.</p></div>
+   <p class="ver">CONSTELLATION 2.4 · 단일 HTML 파일<br>웹 버전과 내려받은 파일은 저장 공간이 서로 달라요. 백업 파일로 옮길 수 있어요.</p></div>
  </aside>
  <aside id="side">
   <section class="glass" id="card"><div id="cardin"></div></section>
@@ -193,9 +203,16 @@ body.drag,body.drag *{user-select:none;-webkit-user-select:none}body.drag #sky{c
 <div class="modal glass" id="spop" role="dialog" aria-label="나만의 밤하늘 만들기"><h3>나만의 밤하늘</h3><p style="margin:2px 0 4px;color:var(--mute)">첫 별자리의 이름을 지어 주세요.</p>
  <label>별자리 이름<input type="text" id="s-name" maxlength="40" autocomplete="off"></label><label>한 줄 설명 (선택)<input type="text" id="s-desc" maxlength="80" autocomplete="off"></label>
  <button class="go" data-a="sstart">나만의 밤하늘 만들기</button><button class="lk" style="color:var(--mute)" data-a="sskip">나중에 할게요</button></div>
+<div class="modal glass" id="vpop" role="dialog" aria-label="영상 감상"><button class="mx" data-a="close" aria-label="닫기">×</button>
+ <div class="eb">NOW WATCHING</div><div class="vh"><b id="v-t"></b><span id="v-a"></span></div>
+ <div class="vbox"><video id="vid" playsinline webkit-playsinline preload="metadata"></video></div>
+ <div class="vctl"><button class="vb" id="vplay" data-a="vptoggle" aria-label="재생/일시정지">▶</button><input type="range" id="vseek" min="0" max="1000" value="0" aria-label="재생 위치"><span class="t" id="vtime">0:00 / 0:00</span><span id="vvolw"><input type="range" id="vvol" min="0" max="100" value="80" aria-label="볼륨"></span></div>
+ <div class="vsrc" id="vsrc"></div>
+ <div class="row" style="justify-content:space-between;margin-top:12px"><button class="pill" data-a="vsound">영상 닫기 · 음원만 듣기</button><button class="pill" data-a="close">영상 닫기</button></div>
+ <p class="mnote" id="vnote"></p></div>
 <div class="modal glass" id="cf" role="alertdialog" aria-label="확인"><h3 id="cf-t" style="font-size:19px;font-style:normal;font-family:var(--kr)"></h3><p id="cf-s" style="color:var(--mute);margin:6px 0 14px"></p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="pill" data-a="close">취소</button><button class="pill del" id="cf-ok" data-a="cfok"></button></div></div>
 <div id="toast" class="glass" role="status"></div>
-<input type="file" id="impf" accept=".json,application/json" hidden><input type="file" id="imgf" accept="image/png,image/jpeg,image/webp" hidden><input type="file" id="audf" accept="audio/*" hidden>
+<input type="file" class="fi" id="impf" accept=".json,application/json" tabindex="-1"><input type="file" class="fi" id="imgf" accept="image/png,image/jpeg,image/webp" tabindex="-1"><input type="file" class="fi" id="audf" accept="audio/*,.mp3,.m4a,.aac,.wav,.ogg,.oga,.opus,.flac" tabindex="-1"><input type="file" class="fi" id="vidf" accept="video/*,.mp4,.mov,.m4v,.webm,.ogv" tabindex="-1"><audio id="aud" playsinline preload="metadata"></audio>
 <div id="intro" class="on" aria-label="오프닝"><div id="veil"></div><div id="logo"><div class="orn"><i></i><svg viewBox="0 0 20 20" width="14" height="14"><path d="M10 1Q10 10 19 10Q10 10 10 19Q10 10 1 10Q10 10 10 1Z" fill="currentColor"/></svg><i></i></div><h1>CONSTELLATION</h1><div class="lline"></div><p>your songs, your stars.</p></div><button id="skip" class="pill" data-a="skip">SKIP</button></div>
 <script>
 (function(){
@@ -232,7 +249,7 @@ function norm(r){
  if(!o.constellations.length&&o.songs.length)o.constellations.push({id:uq('c1'),name:'Constellation No. 01',desc:'',hue:205,updated:now});
  var c0=o.constellations[0]?o.constellations[0].id:'',cs={},sm={};o.constellations.forEach(function(c){cs[c.id]=1});
  o.songs=o.songs.filter(ok).map(function(s){var tg=[];(Array.isArray(s.tags)?s.tags:[]).forEach(function(t){t=str(t,14).replace(/[#\s]/g,'');if(t&&tg.indexOf(t)<0&&tg.length<8)tg.push(t)});
-  var x={id:uq(s.id),cid:cs[s.cid]?s.cid:c0,x:num(s.x,.1+Math.random()*.8,.03,.97),y:num(s.y,.1+Math.random()*.8,.03,.97),title:str(s.title,40),artist:str(s.artist,40),who:str(s.who,30),note:str(s.note,90),scene:str(s.scene,200),tags:tg,hue:Math.round(num(s.hue,205,0,360)),sat:Math.round(num(s.sat,85,0,100)),cover:/^data:image\/(png|jpeg|webp);/.test(s.cover||'')?s.cover:'',created:num(s.created,now,0,9e15)};sm[x.id]=x;return x});
+  var x={id:uq(s.id),cid:cs[s.cid]?s.cid:c0,x:num(s.x,.1+Math.random()*.8,.03,.97),y:num(s.y,.1+Math.random()*.8,.03,.97),title:str(s.title,40),artist:str(s.artist,40),who:str(s.who,30),note:str(s.note,90),scene:str(s.scene,200),tags:tg,hue:Math.round(num(s.hue,205,0,360)),sat:Math.round(num(s.sat,85,0,100)),cover:/^data:image\/(png|jpeg|webp);/.test(s.cover||'')?s.cover:'',mediaA:str(s.mediaA,60),mediaV:str(s.mediaV,60),created:num(s.created,now,0,9e15)};sm[x.id]=x;return x});
  var lk={};o.connections=o.connections.filter(function(l){if(!ok(l)||!sm[l.a]||!sm[l.b]||l.a===l.b||sm[l.a].cid!==sm[l.b].cid)return false;var k=lkey(l.a,l.b);if(lk[k])return false;lk[k]=1;return true}).map(function(l){return{id:uid(),cid:sm[l.a].cid,a:l.a,b:l.b}});
  o.characters=o.characters.filter(function(h){return ok(h)&&str(h.name,30)}).map(function(h){return{id:uq(h.id),name:str(h.name,30),nick:str(h.nick,30),desc:str(h.desc,80),hue:Math.round(num(h.hue,205,0,360)),fav:sm[h.fav]?h.fav:'',cid:cs[h.cid]?h.cid:'',memo:str(h.memo,200)}});
  o.version=2;o.settings={time:['auto','sunset','night','midnight','dawn'].indexOf(st.time)>=0?st.time:'auto',seen:!!st.seen,startDone:!!st.startDone,intro:['first','always','never'].indexOf(st.intro)>=0?st.intro:'first',cid:cs[st.cid]?st.cid:c0,sel:sm[st.sel]&&sm[st.sel].cid===(cs[st.cid]?st.cid:c0)?st.sel:null};return o}
@@ -303,7 +320,6 @@ function undo(){jump(hist,fut)}function redo(){jump(fut,hist)}
 var RT={},linksT={},fx=[],ghosts=[],trails=[],meteors=[],pending=null,link=false,linkFrom=null,view=false,drag=null,hoverId=null,hoverWho=null,activeChar=null,matchSet=null,tab='c',modal=null,popMode='add',tmpCover,popHue=PAL[0],hHue=PAL[0],popBack=null,okFn=null,lastCard=null,visited={};
 var listAnim=false,lt=0,dying=[],dtf=1,lastT=0,ptrs={},pinch=null,dragId=null,lastMv=0,RM=!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches),intro=null,startMsg=corrupt?'저장된 데이터를 읽지 못해 기본 데이터로 시작했어요. 원본은 따로 보관해 두었어요.':(storeOK?'':'이 브라우저에서는 자동 저장이 안 돼요. 「백업 저장」으로 JSON 파일을 내려받아 두세요.');
 var rt=function(id){return RT[id]||(RT[id]={born:0,k:1,n:0,x:-999,y:-999,dx:0,dy:0,vx:0,vy:0,dm:1,sa:0,pulse:0,lb:0})};
-var audio=new Audio(),audioMap={},playing=false;audio.volume=.8;
 /* ===== 캔버스 ===== */
 var bg=$('bg'),b=bg.getContext('2d'),sky=$('sky'),c=sky.getContext('2d'),stage=$('stage');
 var W,H,SWp,SHp,WW,WH,desk,dpr=1,ox=0,oxT=0,oy=0,cam={x:0,y:0,z:1,tx:0,ty:0,tz:1},mx=0,my=0,smx=0,smy=0;
@@ -386,7 +402,7 @@ function toggleLink(a,d){if(a===d||!gs(a)||!gs(d))return;snap();var id=cur().id,
  if(i>=0){var A=gs(a),B=gs(d);ghosts.push({a:[A.x,A.y],b:[B.x,B.y],h:A.hue,t:performance.now()});D.connections.splice(i,1)}else{D.connections.push({id:uid(),cid:id,a:a,b:d});linksT[lkey(a,d)]=performance.now()}touch();save();ui()}
 function addSong(f,w){snap();if(!D.constellations.length)createC('','',true);var n=performance.now(),s={id:uid(),cid:cur().id,x:w[0],y:w[1],title:f.title,artist:f.artist,who:f.who,note:f.note,scene:f.scene,tags:f.tags,hue:f.hue,sat:f.sat,cover:f.cover||'',created:Date.now()};D.songs.push(s);rt(s.id).born=n+800;mkfx(s.x,s.y,s.hue,s.sat,0);D.settings.sel=s.id;touch();save();ui()}
 function delSong(id){var s=gs(id);if(!s)return;snap();dying.push({x:s.x,y:s.y,h:s.hue,s:s.sat,t:performance.now()});mkfx(s.x,s.y,s.hue,s.sat,2);D.connections.forEach(function(l){if(l.a===id||l.b===id){var o=gs(l.a===id?l.b:l.a);if(o)ghosts.push({a:[s.x,s.y],b:[o.x,o.y],h:s.hue,t:performance.now()})}});
- D.songs=D.songs.filter(function(x){return x.id!==id});D.connections=D.connections.filter(function(l){return l.a!==id&&l.b!==id});D.characters.forEach(function(h){if(h.fav===id)h.fav=''});if(D.settings.sel===id)D.settings.sel=null;if(linkFrom===id)linkFrom=null;audioMap[id]=null;touch();save();ui()}
+ D.songs=D.songs.filter(function(x){return x.id!==id});D.connections=D.connections.filter(function(l){return l.a!==id&&l.b!==id});D.characters.forEach(function(h){if(h.fav===id)h.fav=''});if(D.settings.sel===id)D.settings.sel=null;if(linkFrom===id)linkFrom=null;dropMedia(id);touch();save();ui()}
 function createC(name,desc,nosnap){if(!nosnap)snap();var n=D.constellations.length+1,cc={id:uid(),name:(name||'').trim().slice(0,40)||('Constellation No. '+('0'+n).slice(-2)),desc:(desc||'').trim().slice(0,80),hue:PAL[n%7].h,updated:Date.now()};D.constellations.push(cc);D.settings.cid=cc.id;D.settings.sel=null;save();ui();return cc}
 function startCreate(){var nm=$('s-name').value,ds=$('s-desc').value;D.settings.startDone=true;closeModal();createC(nm,ds,true);toast('밤하늘이 열렸어요. 첫 번째 별을 남겨 보세요.')}
 function maybeStart(){if(!D.constellations.length&&!D.settings.startDone&&!modal&&!intro){$('s-name').value='';$('s-desc').value='';showModal('spop');setTimeout(function(){$('s-name').focus()},250)}}
@@ -437,7 +453,7 @@ sky.addEventListener('wheel',function(e){e.preventDefault();var p=pos(e);zoomAt(
 addEventListener('pointermove',function(e){mx=e.clientX/W-.5;my=e.clientY/H-.5;var u=$('cur');u.style.left=e.clientX+'px';u.style.top=e.clientY+'px'});
 /* ===== 모달 ===== */
 function showModal(id){modal=id;popBack=document.activeElement;$('scrim').classList.add('on');$(id).classList.add('on')}
-function closeModal(){if(!modal)return;if(modal==='spop'&&!D.settings.startDone){D.settings.startDone=true;save()}$(modal).classList.remove('on');$('scrim').classList.remove('on');modal=null;pending=null;okFn=null;try{popBack&&popBack.focus&&popBack.focus()}catch(e){}}
+function closeModal(){if(!modal)return;if(modal==='vpop'&&!vkeep)vstop();if(modal==='spop'&&!D.settings.startDone){D.settings.startDone=true;save()}$(modal).classList.remove('on');$('scrim').classList.remove('on');modal=null;pending=null;okFn=null;try{popBack&&popBack.focus&&popBack.focus()}catch(e){}}
 function ask(t,s,ok,fn){$('cf-t').textContent=t;$('cf-s').textContent=s;$('cf-ok').textContent=ok;okFn=fn;showModal('cf')}
 function swatches(el,cb,hue){el.innerHTML=PAL.map(function(p,i){return'<button type="button" data-i="'+i+'" style="background:'+hsl(p.h,p.s,72,1)+';color:'+hsl(p.h,p.s,72,1)+'" aria-label="'+p.n+'"></button>'}).join('');el.onclick=function(e){var bt=e.target.closest('button');if(bt)cb(PAL[+bt.dataset.i])};}
 function markSw(el,p){[].forEach.call(el.children,function(b2,i){b2.className=PAL[i]===p?'on':''})}
@@ -458,7 +474,6 @@ function savePop(){var ti=$('f-title').value.trim();if(!ti){$('f-title').focus()
  else{var s=gs(D.settings.sel);if(!s){closeModal();return}snap();for(var k in f)s[k]=f[k];if(tmpCover!==undefined)s.cover=tmpCover;touch();closeModal();save();ui()}}
 function resizeImg(file,cb){if(!/^image\/(png|jpeg|webp)$/.test(file.type)){toast('PNG, JPG, WEBP 이미지만 쓸 수 있어요.');return}var fr=new FileReader();fr.onload=function(){var im=new Image();im.onload=function(){var cv=document.createElement('canvas'),z=Math.min(1,360/Math.max(im.width,im.height));cv.width=Math.max(1,im.width*z);cv.height=Math.max(1,im.height*z);cv.getContext('2d').drawImage(im,0,0,cv.width,cv.height);cb(cv.toDataURL('image/jpeg',.82))};im.onerror=function(){toast('이미지를 읽지 못했어요.')};im.src=fr.result};fr.readAsDataURL(file)}
 $('imgf').addEventListener('change',function(e){var f=e.target.files[0];e.target.value='';if(f)resizeImg(f,function(u){tmpCover=u;$('cvp').src=u;$('cvp').style.visibility='visible'})});
-$('audf').addEventListener('change',function(e){var f=e.target.files[0],s=gs(D.settings.sel);e.target.value='';if(!f||!s)return;if(!/^audio\//.test(f.type)){toast('음원 파일을 골라 주세요.');return}audioMap[s.id]=URL.createObjectURL(f);audio.pause();playing=false;ui();toast('음원은 이번 접속 동안만 유지돼요.')});
 $('f-tags').addEventListener('input',syncQt);
 $('qt').addEventListener('click',function(e){var bt=e.target.closest('button');if(!bt)return;var t=bt.textContent.slice(1),cu=parseTags($('f-tags').value),i=cu.indexOf(t);if(i>=0)cu.splice(i,1);else cu.push(t);$('f-tags').value=cu.join(' ');syncQt()});
 swatches($('sw'),setPop);swatches($('hsw'),function(p){hHue=p;markSw($('hsw'),p)});
@@ -497,21 +512,95 @@ function ui(){fix();compute();var cc=cur(),ss=songs(),sel=gs(D.settings.sel);
  card(sel,ss);
  var pool=$('fl').value==='별자리'&&matchSet?D.songs.filter(function(s){return matchSet[s.id]}):ss.filter(function(s){return!matchSet||matchSet[s.id]});
  $('list').innerHTML=pool.map(function(t,ix){return'<li tabindex="0" style="--i:'+Math.min(ix,14)+'" data-id="'+t.id+'" class="'+(t.id===D.settings.sel?'sel':'')+'"><span style="color:'+hsl(t.hue,Math.max(25,t.sat),75,1)+';display:flex">'+ST+'</span><span class="tx"><b>'+esc(t.artist?t.artist+' — '+(t.title||'제목 없음'):(t.title||'제목 없음'))+'</b><small>'+esc(t.who||'')+(t.cid!==cc.id?' · '+esc((D.constellations.filter(function(x){return x.id===t.cid})[0]||{}).name):'')+'</small></span></li>'}).join('')||'<li class="none" style="cursor:default">'+(matchSet?'찾는 별이 없어요.':'아직 별이 없어요.')+'</li>';
- if(listAnim){listAnim=false;var LL=$('list');LL.className='stag';clearTimeout(lt);lt=setTimeout(function(){LL.className=''},1100)}var v=$('vinfo');v.className='glass'+(sel&&view?' on':'');v.innerHTML=sel?'<b>'+esc(sel.title||'제목 없음')+'</b><div style="color:#cfc8f5">'+esc(sel.artist)+(sel.who?' · '+esc(sel.who.toUpperCase()):'')+'</div>'+(sel.note?'<p>“'+esc(sel.note)+'”</p>':'')+'<div class="row" style="justify-content:center"><button class="pill sm" data-a="next">이어지는 별로 ›</button></div>':'<b>별을 눌러 보세요</b><div class="row" style="justify-content:center"><button class="pill sm" data-a="next">첫 별로 ›</button></div>';v.className='glass on'.replace(' on',view?' on':'')}
+ if(listAnim){listAnim=false;var LL=$('list');LL.className='stag';clearTimeout(lt);lt=setTimeout(function(){LL.className=''},1100)}var v=$('vinfo');v.className='glass'+(sel&&view?' on':'');v.innerHTML=sel?'<b>'+esc(sel.title||'제목 없음')+'</b><div style="color:#cfc8f5">'+esc(sel.artist)+(sel.who?' · '+esc(sel.who.toUpperCase()):'')+'</div>'+(sel.note?'<p>“'+esc(sel.note)+'”</p>':'')+'<div class="row" style="justify-content:center">'+vMediaBtns(sel)+'<button class="pill sm" data-a="next">이어지는 별로 ›</button></div>':'<b>별을 눌러 보세요</b><div class="row" style="justify-content:center"><button class="pill sm" data-a="next">첫 별로 ›</button></div>';v.className='glass on'.replace(' on',view?' on':'');gcMedia();syncPlayerUI()}
 function card(s,ss){var el=$('cardin'),cd=$('card');if(!s){el.innerHTML='<div class="none" style="text-align:center;padding:26px 6px;font:italic 400 17px var(--serif)">별을 하나 눌러<br>이 곡의 세계를 열어 보세요</div>';lastCard=null;return}
  cd.style.setProperty('--c1',hsl(s.hue,Math.max(25,s.sat),68,1));cd.style.setProperty('--c2',hsl(s.hue,Math.min(60,s.sat),26,1));
- var no=ss.indexOf(s)+1,cn=D.connections.filter(function(l){return l.a===s.id||l.b===s.id}).length,same=s.who&&ss.filter(function(o){return o.who.toLowerCase()===s.who.toLowerCase()}).length>1,au=audioMap[s.id];
- el.innerHTML='<div id="lpw" class="'+(playing?'play':'')+'"><div id="halo"></div><div class="vinyl"></div><div class="sleeve"><img alt="앨범 커버" src="'+coverURL(s)+'"></div></div><div class="meta"><div class="no"><i></i>No. '+('0'+no).slice(-2)+'</div><h2>'+esc(s.title||'제목 없음')+'</h2><div class="ar">'+esc(s.artist)+'</div>'+(s.who?'<span class="chip">'+esc(s.who.toUpperCase())+'</span>':'')+(s.note?'<p class="nt">“'+esc(s.note)+'”</p>':'')+(s.scene?'<div class="sc"><small>이 곡이 떠오르는 장면</small>'+esc(s.scene)+'</div>':'')+(s.tags.length?'<div class="tg">'+s.tags.map(function(t){return'<span>#'+esc(t)+'</span>'}).join('')+'</div>':'')+
+ var no=ss.indexOf(s)+1,cn=D.connections.filter(function(l){return l.a===s.id||l.b===s.id}).length,same=s.who&&ss.filter(function(o){return o.who.toLowerCase()===s.who.toLowerCase()}).length>1;
+ el.innerHTML='<div id="lpw" class="'+(isPl(s.id)?'play':'')+'"><div id="halo"></div><div class="vinyl"></div><div class="sleeve"><img alt="앨범 커버" src="'+coverURL(s)+'"></div></div><div class="meta"><div class="no"><i></i>No. '+('0'+no).slice(-2)+'</div><h2>'+esc(s.title||'제목 없음')+'</h2><div class="ar">'+esc(s.artist)+'</div>'+(s.who?'<span class="chip">'+esc(s.who.toUpperCase())+'</span>':'')+(s.note?'<p class="nt">“'+esc(s.note)+'”</p>':'')+(s.scene?'<div class="sc"><small>이 곡이 떠오르는 장면</small>'+esc(s.scene)+'</div>':'')+(s.tags.length?'<div class="tg">'+s.tags.map(function(t){return'<span>#'+esc(t)+'</span>'}).join('')+'</div>':'')+
  '<dl class="info"><dt>등록</dt><dd>'+dt(s.created)+'</dd><dt>별자리</dt><dd>'+esc(cur().name)+'</dd><dt>색</dt><dd>'+PAL[kind(s)].n+'</dd><dt>연결</dt><dd>'+cn+'곡</dd></dl>'+
- (au?'<div class="pl"><button data-a="ptoggle" aria-label="재생/일시정지">'+(playing?'❚❚':'▶')+'</button><input type="range" id="prog" min="0" max="1000" value="0" aria-label="재생 위치"><span id="ptime">0:00</span><input type="range" id="vol" min="0" max="100" value="'+Math.round(audio.volume*100)+'" aria-label="볼륨"></div>':'')+
- '<div class="row ed"><button class="pill sm" data-a="edit">다듬기</button><button class="pill sm" data-a="audio">'+(au?'음원 바꾸기':'음원 불러오기')+'</button>'+(same?'<button class="pill sm" data-a="same">같은 캐릭터 잇기</button>':'')+'<button class="pill sm del" data-a="del">별 지우기</button></div></div>';
+ mediaHTML(s)+
+ '<div class="row ed"><button class="pill sm" data-a="edit">다듬기</button>'+(same?'<button class="pill sm" data-a="same">같은 캐릭터 잇기</button>':'')+'<button class="pill sm del" data-a="del">별 지우기</button></div></div>';
  if(lastCard!==s.id){el.classList.remove('lpin');void el.offsetWidth;el.classList.add('lpin')}lastCard=s.id}
-/* 재생 */
-function tfmt(t){t=Math.floor(t||0);return Math.floor(t/60)+':'+('0'+t%60).slice(-2)}
-audio.addEventListener('timeupdate',function(){var p=$('prog'),t=$('ptime');if(p&&audio.duration)p.value=audio.currentTime/audio.duration*1000;if(t)t.textContent=tfmt(audio.currentTime)});
-audio.addEventListener('ended',function(){playing=false;ui()});
-function togglePlay(){var id=D.settings.sel,u=audioMap[id];if(!u)return;if(audio.getAttribute('data-id')!==id){audio.src=u;audio.setAttribute('data-id',id)}if(playing){audio.pause();playing=false}else{audio.play().catch(function(){toast('재생할 수 없는 파일이에요.')});playing=true}ui()}
-$('card').addEventListener('input',function(e){if(e.target.id==='prog'&&audio.duration)audio.currentTime=e.target.value/1000*audio.duration;if(e.target.id==='vol')audio.volume=e.target.value/100});
+/* ===== 미디어 (음원 · 영상) — 파일은 이번 접속 동안만 재생 가능(서버에 저장되지 않음) ===== */
+var MEDIA={},soundSrc={},PL={id:null,mode:null},aud=$('aud'),vid=$('vid'),volOK=true,vol=.8,vkeep=false;
+var IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+try{aud.volume=.5;volOK=aud.volume===.5;aud.volume=vol}catch(e){volOK=false}
+function fmt(t){t=Math.floor(t||0);return Math.floor(t/60)+':'+('0'+t%60).slice(-2)}
+function srcOf(id){var m=MEDIA[id];if(!m)return null;if(m.a&&m.v)return soundSrc[id]==='video'?'v':'a';return m.a?'a':(m.v?'v':null)}
+function isPl(id){return !!id&&PL.id===id&&(PL.mode==='v'?!vid.paused:(!aud.paused&&!!aud.getAttribute('src')))}
+function actEl(){return PL.mode==='v'?vid:aud}
+function whenReady(el,fn){if(el.readyState>=1)fn();else{var f=function(){el.removeEventListener('loadedmetadata',f);fn()};el.addEventListener('loadedmetadata',f)}}
+function loadAud(url,key,t){if(aud.dataset.key!==key){aud.pause();aud.src=url;aud.dataset.key=key;try{aud.load()}catch(e){}}if(t!=null)whenReady(aud,function(){try{aud.currentTime=t}catch(e){}})}
+function tryPlay(el){var k=el._tk=(el._tk||0)+1,p=el.play();if(p&&p.catch)p.catch(function(e){if(k===el._tk&&!(e&&e.name==='AbortError'))toast('재생을 시작하지 못했어요. 한 번 더 눌러 주세요.');syncPlayerUI()})}
+function playSong(id){var m=MEDIA[id],s=srcOf(id);if(!s)return;vid.pause();PL.id=id;PL.mode=s==='a'?'a':'vs';loadAud(m[s].url,id+':'+s,null);tryPlay(aud);updateSession();syncPlayerUI()}
+function togglePlay(){var id=D.settings.sel,s=srcOf(id);if(!id||!s)return;
+ if(PL.id===id&&PL.mode!=='v'&&aud.dataset.key===id+':'+s){if(aud.paused)tryPlay(aud);else aud.pause();syncPlayerUI();return}playSong(id)}
+function resetEls(id){if(aud.dataset.key&&aud.dataset.key.indexOf(id+':')===0){aud.pause();aud.removeAttribute('src');aud.dataset.key='';try{aud.load()}catch(e){}}
+ if(vid.dataset.id===id){if(modal==='vpop')closeModal();vid.pause();vid.removeAttribute('src');vid.dataset.id='';try{vid.load()}catch(e){}}if(PL.id===id){PL.id=null;PL.mode=null}}
+function dropMedia(id){var m=MEDIA[id];resetEls(id);if(m){if(m.a)URL.revokeObjectURL(m.a.url);if(m.v)URL.revokeObjectURL(m.v.url)}delete MEDIA[id]}
+function dropKind(id,k){var m=MEDIA[id];if(!m||!m[k])return;resetEls(id);URL.revokeObjectURL(m[k].url);m[k]=null}
+function gcMedia(){Object.keys(MEDIA).forEach(function(id){if(!gs(id))dropMedia(id)})}
+/* 파일 선택·검사 */
+var AE=['mp3','m4a','aac','wav','ogg','oga','opus','flac','weba','caf'],VE=['mp4','mov','m4v','webm','ogv'];
+function probe(kind,url,ok,bad){var el=document.createElement(kind==='v'?'video':'audio'),done=false,to=setTimeout(function(){fin(true)},4000);
+ function fin(r){if(done)return;done=true;clearTimeout(to);el.onloadedmetadata=el.onerror=null;try{el.removeAttribute('src');el.load()}catch(e){}r?ok():bad()}
+ el.preload='metadata';el.muted=true;if(kind==='v')el.setAttribute('playsinline','');el.onloadedmetadata=function(){fin(true)};el.onerror=function(){fin(false)};el.src=url}
+function pickFile(kind,e){var f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;var s=gs(D.settings.sel);if(!s){toast('먼저 곡(별)을 선택해 주세요.');return}
+ var ext=(f.name.split('.').pop()||'').toLowerCase(),t=f.type||'',isA=/^audio\//.test(t)||AE.indexOf(ext)>=0,isV=/^video\//.test(t)||VE.indexOf(ext)>=0;
+ if(!f.size){toast('빈 파일이에요. 다른 파일을 골라 주세요.');return}
+ if(kind==='a'&&!isA){toast(isV?'영상 파일이에요. 「영상 불러오기」로 연결해 주세요.':'음원 파일이 아니에요. MP3, M4A, WAV, OGG 등을 골라 주세요.');return}
+ if(kind==='v'&&!isV){toast(isA?'음원 파일이에요. 「음원 불러오기」로 연결해 주세요.':'영상 파일이 아니에요. MP4, MOV, WebM 등을 골라 주세요.');return}
+ var url=URL.createObjectURL(f),id=s.id;
+ probe(kind,url,function(){if(!gs(id)){URL.revokeObjectURL(url);return}attach(id,kind,f,url)},function(){URL.revokeObjectURL(url);toast('이 브라우저에서는 재생할 수 없는 파일이에요. MP3·M4A·MP4가 가장 안전해요.')})}
+function attach(id,kind,f,url){var m=MEDIA[id]||(MEDIA[id]={a:null,v:null}),old=m[kind];snap();resetEls(id);if(old)URL.revokeObjectURL(old.url);m[kind]={url:url,name:f.name};
+ var s=gs(id);s[kind==='a'?'mediaA':'mediaV']=f.name.slice(0,60);if(!soundSrc[id])soundSrc[id]='audio';touch();save();ui();toast((kind==='a'?'음원':'영상')+'을 연결했어요. 새로고침하면 파일은 다시 선택해야 해요.')}
+function dropFile(kind){var s=gs(D.settings.sel);if(!s)return;snap();dropKind(s.id,kind);s[kind==='a'?'mediaA':'mediaV']='';touch();save();ui()}
+$('audf').addEventListener('change',function(e){pickFile('a',e)});$('vidf').addEventListener('change',function(e){pickFile('v',e)});
+/* 카드 · 감상 모드 UI */
+function mediaHTML(s){var m=MEDIA[s.id]||{},hasA=!!m.a,hasV=!!m.v,h='<div class="media">';
+ function row(ic,lb,nm,ld,act){return'<div class="mrow"><span>'+ic+'</span><span class="mn">'+lb+' · '+esc(nm)+(ld?'':' <em>(다시 선택 필요)</em>')+'</span><button class="pill sm ed" data-a="'+act+'">'+(ld?'바꾸기':'다시 선택')+'</button><button class="pill sm ed" data-a="'+act+'drop" aria-label="빼기">×</button></div>'}
+ if(hasA||s.mediaA)h+=row('♪','음원',m.a?m.a.name:s.mediaA,hasA,'audio');if(hasV||s.mediaV)h+=row('▶','영상',m.v?m.v.name:s.mediaV,hasV,'video');
+ if(hasA||hasV)h+='<div class="pl"><button id="b-play" data-a="ptoggle" aria-label="재생/일시정지">▶</button><input type="range" id="prog" min="0" max="1000" value="0" aria-label="재생 위치"><span id="ptime">0:00</span>'+(volOK?'<input type="range" id="vol" min="0" max="100" value="'+Math.round(vol*100)+'" aria-label="볼륨">':'')+'</div>';
+ if(hasV)h+='<div class="row"><button class="pill sm" data-a="vopen">영상 감상하기</button></div>';
+ var add=(!hasA&&!s.mediaA?'<button class="pill sm" data-a="audio">♪ 음원 불러오기</button>':'')+(!hasV&&!s.mediaV?'<button class="pill sm" data-a="video">▶ 영상 불러오기</button>':'');if(add)h+='<div class="row ed">'+add+'</div>';
+ if(hasA||hasV||s.mediaA||s.mediaV)h+='<p class="mnote">파일은 서버에 저장되지 않아요. 이번 접속 동안만 재생되고, 새로고침하면 다시 선택해야 해요.'+(IOS?' iPad·iPhone에서는 화면을 잠그거나 다른 앱으로 가도 소리(음원)는 이어지지만, 영상 화면은 멈출 수 있어요. 영상의 소리만 계속 들으려면 영상 화면에서 「영상 닫기 · 음원만 듣기」를 누르세요.'+(volOK?'':' 볼륨은 기기의 볼륨 버튼으로 조절해 주세요.'):'')+'</p>';
+ return h+'</div>'}
+function vMediaBtns(s){var m=MEDIA[s.id]||{};return((m.a||m.v)?'<button class="pill sm" id="vpb" data-a="ptoggle">▶ 재생</button>':'')+(m.v?'<button class="pill sm" data-a="vopen">영상 감상하기</button>':'')}
+function syncPlayerUI(){var id=D.settings.sel,p=isPl(id),lw=$('lpw'),b1=$('b-play'),vb=$('vpb');
+ if(lw)lw.classList.toggle('play',p);if(b1)b1.textContent=p?'❚❚':'▶';if(vb)vb.textContent=p?'❚❚ 일시정지':'▶ 재생';
+ var pr=$('prog'),pt=$('ptime');if(pr||pt){var mine=PL.id===id&&PL.mode!=='v'&&!!aud.getAttribute('src');if(pr)pr.value=mine&&aud.duration?aud.currentTime/aud.duration*1000:0;if(pt)pt.textContent=mine?fmt(aud.currentTime)+(aud.duration?' / '+fmt(aud.duration):''):'0:00'}
+ if(modal==='vpop'){$('vplay').textContent=vid.paused?'▶':'❚❚';$('vseek').value=vid.duration?vid.currentTime/vid.duration*1000:0;$('vtime').textContent=fmt(vid.currentTime)+' / '+fmt(vid.duration)}
+ if('mediaSession' in navigator&&PL.id){try{var ms=navigator.mediaSession,el=actEl();ms.playbackState=isPl(PL.id)?'playing':'paused';if(el.duration>0&&isFinite(el.duration))ms.setPositionState({duration:el.duration,playbackRate:el.playbackRate||1,position:Math.min(el.currentTime,el.duration)})}catch(e){}}}
+function setVol(v){vol=Math.max(0,Math.min(1,v));if(volOK){aud.volume=vol;vid.volume=vol}[$('vol'),$('vvol')].forEach(function(i){if(i)i.value=Math.round(vol*100)})}
+['play','pause','ended','timeupdate','loadedmetadata','durationchange'].forEach(function(ev){aud.addEventListener(ev,syncPlayerUI);vid.addEventListener(ev,syncPlayerUI)});
+aud.addEventListener('error',function(){if(aud.getAttribute('src'))toast('음원을 재생할 수 없어요. 파일 형식을 확인해 주세요.')});
+vid.addEventListener('error',function(){if(vid.getAttribute('src'))toast('영상을 재생할 수 없어요. 이 브라우저가 지원하지 않는 형식일 수 있어요.')});
+$('card').addEventListener('input',function(e){var t=e.target;if(t.id==='prog'&&PL.id===D.settings.sel&&PL.mode!=='v'&&aud.duration)aud.currentTime=t.value/1000*aud.duration;if(t.id==='vol')setVol(t.value/100)});
+$('vpop').addEventListener('input',function(e){var t=e.target;if(t.id==='vseek'&&vid.duration){var tt=t.value/1000*vid.duration;vid.currentTime=tt;if(srcOf(PL.id)==='a'&&aud.getAttribute('src')&&isFinite(aud.duration))try{aud.currentTime=Math.min(tt,aud.duration)}catch(x){}}if(t.id==='vvol')setVol(t.value/100)});
+if(!volOK)$('vvolw').style.display='none';
+/* 영상 감상 화면 */
+function renderVsrc(id){var m=MEDIA[id]||{},el=$('vsrc');if(m.a&&m.v){var s=srcOf(id);el.innerHTML='<button class="pill sm'+(s==='v'?' on':'')+'" data-a="vsrc" data-v="video">영상 소리</button><button class="pill sm'+(s==='a'?' on':'')+'" data-a="vsrc" data-v="audio">별도 음원 소리</button>'}else el.innerHTML='';
+ $('vnote').textContent=(m.a&&m.v?'영상과 별도 음원이 모두 있어요. 선택한 쪽의 소리만 재생돼요. ':'')+(IOS?'화면을 잠그면 영상은 멈출 수 있어요. 소리를 이어 들으려면 「영상 닫기 · 음원만 듣기」를 누르세요.':'')}
+function openVideo(id){var m=MEDIA[id],s=gs(id);if(!m||!m.v||!s||modal)return;var carry=PL.id===id&&PL.mode==='vs'&&aud.dataset.key===id+':v',t=carry?aud.currentTime:null,withA=srcOf(id)==='a';aud.pause();
+ if(vid.dataset.id!==id){vid.pause();vid.src=m.v.url;vid.dataset.id=id;try{vid.load()}catch(e){}}if(t!=null)whenReady(vid,function(){try{vid.currentTime=t}catch(e){}});
+ vid.muted=withA;PL.id=id;PL.mode='v';var vp=$('vpop');vp.style.setProperty('--c1',hsl(s.hue,Math.max(25,s.sat),68,1));vp.style.setProperty('--c2',hsl(s.hue,Math.min(60,s.sat),26,1));
+ $('v-t').textContent=s.title||'제목 없음';$('v-a').textContent=[s.artist,s.who&&s.who.toUpperCase()].filter(Boolean).join(' · ');renderVsrc(id);showModal('vpop');
+ if(withA)loadAud(m.a.url,id+':a',null);tryPlay(vid);if(withA)tryPlay(aud);updateSession();syncPlayerUI()}
+function vstop(){vid.pause();if(PL.mode==='v'){aud.pause();PL.mode=srcOf(PL.id)==='a'?'a':'vs'}syncPlayerUI()}
+function vsound(){var id=PL.id,m=MEDIA[id];if(PL.mode!=='v'||!m)return;var t=vid.currentTime,was=!vid.paused;vid.pause();
+ if(srcOf(id)==='a'){PL.mode='a';if(was)tryPlay(aud)}else{PL.mode='vs';loadAud(m.v.url,id+':v',t);if(was)tryPlay(aud)}
+ vkeep=true;closeModal();vkeep=false;updateSession();syncPlayerUI();toast('영상을 닫고 소리만 재생해요. (순간적으로 끊길 수 있어요)')}
+function vToggle(){if(PL.mode!=='v')return;var a=srcOf(PL.id)==='a';if(vid.paused){tryPlay(vid);if(a)tryPlay(aud)}else{vid.pause();aud.pause()}syncPlayerUI()}
+function vSrc(v){var id=PL.id,m=MEDIA[id];if(!m||!m.a||!m.v||PL.mode!=='v')return;soundSrc[id]=v;var playing=!vid.paused;
+ if(v==='audio'){vid.muted=true;loadAud(m.a.url,id+':a',vid.currentTime);if(playing)tryPlay(aud)}else{vid.muted=false;aud.pause()}renderVsrc(id);syncPlayerUI()}
+/* 미디어 세션 (잠금 화면 · 제어 센터) */
+function updateSession(){if(!('mediaSession' in navigator)||typeof MediaMetadata==='undefined')return;var s=gs(PL.id);if(!s)return;try{navigator.mediaSession.metadata=new MediaMetadata({title:s.title||'제목 없음',artist:s.artist||'',album:cur().name||'CONSTELLATION',artwork:[{src:coverURL(s),sizes:'240x240',type:'image/jpeg'}]})}catch(e){}}
+function stepSong(d){var ss=songs().filter(function(x){var m=MEDIA[x.id];return m&&(m.a||m.v)});if(!ss.length)return;var i=-1;ss.forEach(function(x,k){if(x.id===PL.id)i=k});var n=ss[(i+d+ss.length*2)%ss.length];if(modal==='vpop')closeModal();select(n.id,false);playSong(n.id)}
+(function(){if(!('mediaSession' in navigator))return;var ms=navigator.mediaSession;function h(n,f){try{ms.setActionHandler(n,f)}catch(e){}}
+ h('play',function(){if(PL.id){tryPlay(actEl());if(PL.mode==='v'&&srcOf(PL.id)==='a')tryPlay(aud)}});h('pause',function(){aud.pause();vid.pause()});
+ h('seekbackward',function(d){var el=actEl();el.currentTime=Math.max(0,el.currentTime-((d&&d.seekOffset)||10))});h('seekforward',function(d){var el=actEl();el.currentTime=Math.min(el.duration||1e9,el.currentTime+((d&&d.seekOffset)||10))});
+ h('seekto',function(d){var el=actEl();if(d&&isFinite(d.seekTime))el.currentTime=d.seekTime});h('previoustrack',function(){stepSong(-1)});h('nexttrack',function(){stepSong(1)})})();
+
 /* 이벤트 위임 */
 function act(a,el){switch(a){
  case'zin':zoomAt(ox,oy,1.25);break;case'zout':zoomAt(ox,oy,.8);break;
@@ -520,7 +609,7 @@ function act(a,el){switch(a){
  case'find':$('q').focus();break;case'undo':undo();break;case'redo':redo();break;case'newc':newConst();break;case'auto':auto();break;case'newh':openChar('');break;
  case'edit':openSong('edit');break;case'close':closeModal();break;case'save':savePop();break;case'hsave':saveChar();break;
  case'cover':$('imgf').click();break;case'nocover':tmpCover='';var s=gs(D.settings.sel);$('cvp').style.visibility=s?'visible':'hidden';if(s){var sv=s.cover;s.cover='';$('cvp').src=coverURL(s);s.cover=sv}break;
- case'audio':$('audf').click();break;case'skip':endIntro(true);break;case'login':if(fb.user)logout();else googleLogin();break;case'fbpush':ask('클라우드를 이 기기 데이터로 덮어쓸까요?','클라우드에 저장된 기존 데이터는 사라져요.','덮어쓰기',function(){fb.paused=false;pushNow()});break;case'sstart':startCreate();break;case'sskip':closeModal();break;case'export':exportJSON();break;case'import':$('impf').click();break;case'replay':startIntro();break;case'ptoggle':togglePlay();break;case'same':sameLinks();break;case'next':nextStar();break;
+ case'audio':$('audf').click();break;case'video':$('vidf').click();break;case'audiodrop':dropFile('a');break;case'videodrop':dropFile('v');break;case'vopen':openVideo(D.settings.sel);break;case'vptoggle':vToggle();break;case'vsound':vsound();break;case'vsrc':vSrc(el.dataset.v);break;case'skip':endIntro(true);break;case'login':if(fb.user)logout();else googleLogin();break;case'fbpush':ask('클라우드를 이 기기 데이터로 덮어쓸까요?','클라우드에 저장된 기존 데이터는 사라져요.','덮어쓰기',function(){fb.paused=false;pushNow()});break;case'sstart':startCreate();break;case'sskip':closeModal();break;case'export':exportJSON();break;case'import':$('impf').click();break;case'replay':startIntro();break;case'ptoggle':togglePlay();break;case'same':sameLinks();break;case'next':nextStar();break;
  case'del':confirmDel();break;case'cfok':var f=okFn;closeModal();f&&f();break;
  case'hedit':closeModal();openChar(el.dataset.n);break;
  case'hdel':var id=popMode;ask('이 프로필을 지울까요?','곡은 그대로 남아요.','프로필 지우기',function(){snap();D.characters=D.characters.filter(function(h){return h.id!==id});save();ui()});break;
@@ -540,7 +629,8 @@ $('tm').addEventListener('change',function(e){D.settings.time=e.target.value;app
 function setView(v){view=v;document.body.classList.toggle('view',v);link=false;linkFrom=null;if(v)visited={};if(desk)oxT=v?W/2:(272+W-372)/2;else{size();var n=performance.now();songs().forEach(function(s,i){rt(s.id).born=n+i*80})}ui()}
 addEventListener('keydown',function(e){if(intro&&!intro.ending&&/^(Escape| |Enter)$/.test(e.key)){e.preventDefault();endIntro(true);return}var tg=e.target,typing=/INPUT|TEXTAREA|SELECT/.test(tg.tagName)||tg.isContentEditable;
  if(e.key==='Escape'){if(modal)closeModal();else if(link){link=false;linkFrom=null;ui()}else if(view)setView(false);else if(activeChar){activeChar=null;ui()}return}
- if(modal){if(e.key==='Enter'&&tg.tagName==='INPUT'&&tg.type==='text'){e.preventDefault();act(modal==='pop'?'save':modal==='cpop'?'hsave':modal==='spop'?'sstart':'cfok')}return}
+ if(modal==='vpop'&&e.key===' '&&!/BUTTON|INPUT/.test(tg.tagName)){e.preventDefault();vToggle();return}
+if(modal){if(e.key==='Enter'&&tg.tagName==='INPUT'&&tg.type==='text'){e.preventDefault();act(modal==='pop'?'save':modal==='cpop'?'hsave':modal==='spop'?'sstart':'cfok')}return}
  if((e.ctrlKey||e.metaKey)&&/^[zy]$/i.test(e.key)){if(typing)return;e.preventDefault();(e.shiftKey||/y/i.test(e.key))?redo():undo();return}
  if(typing)return;
  if(e.key==='Enter'&&/LI|DIV|BUTTON/.test(tg.tagName)&&tg.closest&&tg.closest('#list,.cc,.hc')){e.preventDefault();tg.click();return}
